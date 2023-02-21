@@ -25,15 +25,15 @@ describe('Exercise block testing', () => {
             url: Cypress.env('newPlatformApiUrl') + '/auth/me',
         }).as('matchedAuth')
 
-        cy.intercept({
-            method: 'POST',
-            url: 'https://uploader.ipst-dev.com/audio/upload',
-        }).as('matchedUploaderAudio')
+        // cy.intercept({
+        //     method: 'POST',
+        //     url: 'https://uploader.ipst-dev.com/audio/upload',
+        // }).as('matchedUploaderAudio')
 
-        cy.intercept({
-            method: 'POST',
-            url: 'https://uploader.ipst-dev.com/image/upload',
-        }).as('matchedUploaderImage')
+        // cy.intercept({
+        //     method: 'POST',
+        //     url: 'https://uploader.ipst-dev.com/image/upload',
+        // }).as('matchedUploaderImage')
 
         cy.visitGroup('id_subject', 'id_group')
 
@@ -75,7 +75,7 @@ describe('Exercise block testing', () => {
     })
 
 
-    it.skip('Основной сценарий - создание упражнения одиночный выбор', () => {
+    it('Основной сценарий - создание упражнения одиночный выбор', () => {
 
         //добавление общей информации
         cy.get('input[name="title"]')
@@ -126,7 +126,7 @@ describe('Exercise block testing', () => {
 
     })
 
-    it.skip('Основной сценарий - создание упражнения множественный выбор', () => {
+    it('Основной сценарий - создание упражнения множественный выбор', () => {
 
         //добавление общей информации
         cy.get('input[name="title"]')
@@ -180,7 +180,7 @@ describe('Exercise block testing', () => {
 
     })
 
-    it.skip('Основной сценарий - создание упражнения ввод текста', () => {
+    it('Основной сценарий - создание упражнения ввод текста', () => {
 
         //добавление общей информации
         cy.get('input[name="title"]')
@@ -267,9 +267,9 @@ describe('Exercise block testing', () => {
         cy.get('textarea[name="answer"]')
             .eq(2)
             .type('3')
-        
+
         cy.contains('добавить')
-        .click()
+            .click()
 
         cy.get('textarea[name="answer"]')
             .eq(3)
@@ -377,6 +377,73 @@ describe('Exercise block testing', () => {
         cy.wait(1000)
 
         cy.contains('Запишите ответ с помощью микрофона:')
+            .should('exist')
+
+        cy.contains('Упражнение aa успешно создано')
+            .should('exist')
+
+    })
+
+    it('Основной сценарий - создание упражнения c сопоставлением', () => {
+
+        //добавление общей информации
+        cy.get('input[name="title"]')
+            .type('aa')
+
+        cy.get('textarea[name="text"]')
+            .type('aa')
+
+        cy.get('textarea[name="task"]')
+            .type('aa')
+
+        cy.contains('ДАЛЕЕ')
+            .click()
+
+        //добавление медиафайла
+
+        cy.contains('Продолжить без медиафайла')
+            .click()
+
+        //добавление задания
+
+        cy.get('textarea[name="text"]')
+            .type('aa')
+
+        cy.contains('Сопоставление')
+            .click()
+
+        cy.get('textarea[name="answer"]')
+            .eq(0)
+            .type('1')
+
+        cy.get('textarea[name="answer"]')
+            .eq(1)
+            .type('2')
+        
+        cy.get('textarea[name="answer"]')
+            .eq(2)
+            .type('3')
+
+        cy.get('textarea[name="comparison"]')
+            .eq(0)
+            .type('4')
+            
+        cy.get('textarea[name="comparison"]')
+            .eq(1)
+            .type('5')
+
+        cy.get('textarea[name="comparison"]')
+            .eq(2)
+            .type('6')
+
+        cy.contains('СОХРАНИТЬ')
+            .click()
+
+        cy.wait('@matchedCreateExercise')
+
+        cy.wait(1000)
+
+        cy.contains('Сопоставьте ответы:')
             .should('exist')
 
         cy.contains('Упражнение aa успешно создано')

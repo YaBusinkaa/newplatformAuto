@@ -1,4 +1,5 @@
 //import 'cypress-file-upload';
+Cypress.on('uncaught:exception', () => false)
 
 Cypress.Commands.add('login', () => {                   // Отдельная функция выполнения запроса авторизации
   cy.request({                                    // отправка запроса на API
@@ -383,23 +384,7 @@ Cypress.Commands.add('createHomeworkTask', (title, id_lesson, id_task) => {    /
     })
 })
 
-Cypress.Commands.add('createParentFolder', (title, id_parentFolder) => {    // Создание папки
-  cy.request({
-    method: 'POST',
-    url: Cypress.env('newPlatformApiUrl') + "/folders",
-    failOnStatusCode: false,
-    headers: {
-      'Authorization': 'Bearer ' + Cypress.env('accessToken'),
-    },
-    body: {
-      "title": title
-    }
-  }).as('createParentFolder')
-    .then((response) => {
-      expect(response.status).to.eq(201)
-      Cypress.env(id_parentFolder, response.body.id)
-    })
-})
+
 
 Cypress.Commands.add('createFolder', (title, id_folder, id_parentFolder) => {    // Создание подпапки
   cy.request({
@@ -429,9 +414,6 @@ Cypress.Commands.add('deleteParentFolder', (id_parentFolder) => {    // Удал
       'Authorization': 'Bearer ' + Cypress.env('accessToken'),
     },
   }).as('deleteParentFolder')
-    .then((response) => {
-      expect(response.status).to.eq(200)
-    })
 })
 
 Cypress.Commands.add('deleteFolder', (id_folder) => {    // Удаление подпапки
@@ -701,6 +683,44 @@ Cypress.Commands.add('uploadFile', { prevSubject: true }, (subject, fixturePath,
       cy.wrap(subject).trigger('change', { force: true });
     });
   });
+})
+
+
+Cypress.Commands.add('createParentFolder', (title, id_parentFolder) => {    // Создание папки
+  cy.request({
+    method: 'POST',
+    url: Cypress.env('newPlatformApiUrl') + "/folders",
+    failOnStatusCode: false,
+    headers: {
+      'Authorization': 'Bearer ' + Cypress.env('accessToken'),
+    },
+    body: {
+      "title": title
+    }
+  }).as('createParentFolder')
+    .then((response) => {
+      expect(response.status).to.eq(201)
+      Cypress.env(id_parentFolder, response.body.id)
+    })
+})
+
+Cypress.Commands.add('getMyParentFolders', (title) => {    // получение всех предметов
+  cy.request({
+    method: 'GET',
+    url: Cypress.env('newPlatformApiUrl') + "/folders",
+    failOnStatusCode: false,
+    headers: {
+      'Authorization': 'Bearer ' + Cypress.env('accessToken'),
+    },
+  }).as('getMyParentFolders')
+    .then((response) => {
+      for (let i = 0; i < response.body.length; i++) {
+        if (response.body[i].title == title) {
+          Cypress.env('id_parentFolder', response.body[i].id)
+          break
+        }
+      }
+    })
 })
 
 

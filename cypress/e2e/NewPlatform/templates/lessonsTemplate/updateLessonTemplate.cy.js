@@ -1,6 +1,13 @@
 describe('Update template lesson', () => {
 
 
+    before (() => {
+
+        cy.login()
+        cy.getMyParentFolders('ParentFolder')
+        cy.deleteParentFolder('id_parentFolder')
+    })
+
     beforeEach(() => {
         
         cy.login();
@@ -62,6 +69,7 @@ describe('Update template lesson', () => {
 
     afterEach(() => {
         cy.login()
+        cy.getMyParentFolders('testParent')
         cy.deleteParentFolder('id_parentFolder')
     })
 

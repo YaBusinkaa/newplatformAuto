@@ -1,5 +1,10 @@
 describe('Update folder', () => {
 
+    before (() => {
+        cy.login()
+        cy.getMyParentFolders('ParentFolder')
+        cy.deleteParentFolder('id_parentFolder')
+    })
 
     beforeEach(() => {
         cy.login();
@@ -51,6 +56,7 @@ describe('Update folder', () => {
 
     afterEach(() => {
         cy.login()
+        cy.getMyParentFolders('ParentFolder')
         cy.deleteParentFolder('id_parentFolder')
     })
 

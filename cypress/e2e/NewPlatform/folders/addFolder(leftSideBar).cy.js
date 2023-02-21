@@ -1,8 +1,18 @@
 describe('Add folder', () => {
 
+    before (() => {
+
+        cy.login()
+        cy.getMyParentFolders('testParent')
+        cy.deleteParentFolder('id_parentFolder')
+    })
+
 
     beforeEach( () => {
         cy.login();
+
+        cy.createParentFolder('testParent', 'id_parent_folder')
+
         cy.intercept({
             method: 'GET',
             url: Cypress.env('newPlatformApiUrl')+'/auth/me',
@@ -28,11 +38,17 @@ describe('Add folder', () => {
         .click()
         cy.wait(1000)
 
-        cy.get('svg[data-testid="AddIcon"]')
-        .eq(0)
+        cy.contains('testParent')
         .parent()
+        .find('[data-testid="AddIcon"]')
         .click()
-        .wait(1000)
+
+    })
+
+    afterEach(() => {
+        cy.login()
+        cy.getMyParentFolders('testParent')
+        cy.deleteParentFolder('id_parentFolder')
     })
     
 

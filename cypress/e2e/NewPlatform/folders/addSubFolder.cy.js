@@ -1,9 +1,15 @@
 describe('Update folder', () => {
 
+    before (() => {
+        cy.login()
+        cy.getMyParentFolders('testParent')
+        cy.deleteParentFolder('id_parentFolder')
+    })
 
     beforeEach(() => {
         cy.login();
-        cy.createParentFolder('ParentFolder', 'id_parentFolder');
+        cy.createParentFolder('testParent', 'id_parent_folder')
+        cy.createFolder('testFolder', 'id_folder','id_parent_folder', )
 
         cy.intercept({
             method: 'GET',
@@ -26,21 +32,33 @@ describe('Update folder', () => {
         cy.wait('@matchedUrl')
 
         cy.get('p')
-            .contains('Моё')
-            .click()
+        .contains('Моё')
+        .click()
         cy.wait(1000)
 
-        cy.get('svg[data-testid="AddIcon"]')
-        .eq(1)
+        cy.contains('testParent')
         .parent()
         .click()
-        .wait(1000)
+
+        cy.contains('testFolder')
+            .parent()
+            .parent()
+            .find('[aria-haspopup="menu"]')
+            .click()
+            .then(($menu) => {
+                let a = $menu.attr('aria-controls')
+                cy.get('div[id="' + a + '"]')
+                    .contains('Создать подпапку')
+                    .click()
+            });
+
+
     })
 
     afterEach(() => {
         cy.login()
+        cy.getMyParentFolders('testParent')
         cy.deleteParentFolder('id_parentFolder')
-
     })
 
     it('Основной сценарий - 2 символа', () => {

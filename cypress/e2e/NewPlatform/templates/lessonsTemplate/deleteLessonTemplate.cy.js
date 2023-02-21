@@ -1,5 +1,12 @@
 describe('Delete template lesson', () => {
 
+    before (() => {
+
+        cy.login()
+        cy.getMyParentFolders('ParentFolder')
+        cy.deleteParentFolder('id_parentFolder')
+    })
+
 
     beforeEach(() => {
         cy.login();
@@ -59,9 +66,10 @@ describe('Delete template lesson', () => {
 
     afterEach(() => {
         cy.login()
+        cy.getMyParentFolders('testParent')
         cy.deleteParentFolder('id_parentFolder')
     })
-
+    
     it('Основной сценарий - удаление шаблона', () => {
 
         cy.get('button[type="submit"]')

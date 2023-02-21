@@ -88,7 +88,7 @@ describe('Edit personal data', () => {
 
 
         cy.get('@changeFioAgain').should((response) =>{        // Проверяем фио
-            expect(response.statusCode).to.eq(200)
+            expect(response.status).to.eq(200)
             expect(response.body.firstName).to.eq(Cypress.env("firstName"))
             expect(response.body.lastName).to.eq(Cypress.env("lastName"))
             expect(response.body.middleName).to.eq(Cypress.env("middleName"))

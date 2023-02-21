@@ -29,6 +29,12 @@ describe('Add group', () => {
 
     })
 
+    afterEach(()=>{
+        cy.getMySubjects(sub)
+        cy.deleteSubject('id_subject')
+    })
+
+
     let abc = "abcdefghijklmnopqrstuvwxyz"; 
     let sub = "";
     while (sub.length < 6) {
@@ -54,5 +60,7 @@ describe('Add group', () => {
         cy.contains('Предмет успешно создан!')
         .should('exist')
     })
+
+
 
 })
